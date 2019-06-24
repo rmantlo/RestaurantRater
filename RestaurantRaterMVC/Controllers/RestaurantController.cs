@@ -14,13 +14,25 @@ namespace RestaurantRaterMVC.Controllers
         // GET: Restaurant
         public ActionResult Index()
         {
-            Restaurant one = new Restaurant();
-            one.RestaurantID = 1;
-            one.Name = "Test";
-            one.FoodType = "Thai";
-            one.Rating = 5;
-            
             return View(_restaurantDb.Restaurants.ToList());
+        }
+        //GET: restaurat/create
+        public ActionResult Create()
+        {
+            return View();
+        }
+        //POST: restaurant/create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Restaurant restaurant)
+        {
+            if (ModelState.IsValid)
+            {
+                _restaurantDb.Restaurants.Add(restaurant);
+                _restaurantDb.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(restaurant);
         }
     }
 }
